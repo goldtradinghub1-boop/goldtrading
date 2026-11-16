@@ -110,11 +110,21 @@
     /* keep real content above the fx layers */
     header, .hero, .ticker, section, footer { position: relative; z-index: 2; }
 
-    /* ---- Scroll reveal ---- */
-    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+    /* ---- Scroll reveal: elements fly in ---- */
+    .reveal {
+      opacity: 0; transform: translateY(70px) scale(.94);
+      transition: opacity .7s ease, transform .9s cubic-bezier(.16,1,.3,1);
+      will-change: transform, opacity;
+    }
     .reveal.in { opacity: 1; transform: none; }
-    .reveal.d1 { transition-delay: .08s; } .reveal.d2 { transition-delay: .16s; }
-    .reveal.d3 { transition-delay: .24s; } .reveal.d4 { transition-delay: .32s; }
+    /* directional fly-in variants */
+    .reveal.from-left  { transform: translateX(-90px) rotate(-3deg); }
+    .reveal.from-right { transform: translateX(90px) rotate(3deg); }
+    .reveal.from-up    { transform: translateY(100px) scale(.9); }
+    .reveal.zoom       { transform: scale(.8); }
+    .reveal.in.from-left, .reveal.in.from-right, .reveal.in.from-up, .reveal.in.zoom { transform: none; }
+    .reveal.d1 { transition-delay: .09s; } .reveal.d2 { transition-delay: .18s; }
+    .reveal.d3 { transition-delay: .27s; } .reveal.d4 { transition-delay: .36s; }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
     }
@@ -165,7 +175,7 @@
     /* video overlays the still and fades in only once it's actually playing */
     .hero-media {
       position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-      opacity: 0; transition: opacity 1s ease;
+      opacity: 0; transition: opacity 1.8s ease;
     }
     .hero-media.is-playing { opacity: 1; }
     @media (prefers-reduced-motion: reduce) { .hero-media { display: none; } }
@@ -173,14 +183,17 @@
     .hero-fade {
       position: absolute; inset: 0;
       background:
-        linear-gradient(90deg, rgba(13,11,7,0.92) 0%, rgba(13,11,7,0.55) 28%, rgba(13,11,7,0) 55%),
-        linear-gradient(0deg, rgba(13,11,7,0.9) 0%, rgba(13,11,7,0) 35%);
+        /* fully opaque over the left ~34% to mask the image's baked-in title, then fade out before the figure */
+        linear-gradient(90deg, rgba(13,11,7,1) 0%, rgba(13,11,7,1) 30%, rgba(13,11,7,0.6) 46%, rgba(13,11,7,0) 66%),
+        /* top fade blends the image into the header; bottom fade dissolves into the ticker */
+        linear-gradient(0deg, rgba(13,11,7,1) 0%, rgba(13,11,7,0.85) 8%, rgba(13,11,7,0) 38%),
+        linear-gradient(180deg, rgba(13,11,7,0.95) 0%, rgba(13,11,7,0.5) 6%, rgba(13,11,7,0) 16%);
       pointer-events: none;
     }
     .hero-copy {
       position: absolute; left: 0; top: 0; bottom: 0;
       display: flex; flex-direction: column; justify-content: center;
-      max-width: 560px; padding-left: max(1.5rem, calc((100vw - var(--maxw)) / 2 + 1.5rem));
+      max-width: 680px; padding-left: max(1.5rem, calc((100vw - var(--maxw)) / 2 + 1.5rem));
       padding-right: 1.5rem;
     }
     .eyebrow {
@@ -189,9 +202,10 @@
       color: var(--gold-hi); margin-bottom: 1.2rem;
     }
     .eyebrow::before { content: "◆"; font-size: 0.7rem; color: var(--gold); }
-    .hero-copy h1 { font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1.02; font-weight: 800; letter-spacing: -0.02em; }
+    .hero-copy h1 { font-size: clamp(2rem, 5vw, 3.9rem); line-height: 1.14; font-weight: 800; letter-spacing: -0.02em; }
     .hero-copy h1 .l1 { color: var(--white); display: block; }
-    .hero-copy h1 .l2 { display: block; }
+    /* inline-block + padding gives the gradient-clipped glyphs room so nothing is shaved */
+    .hero-copy h1 .l2 { display: inline-block; padding: 0.06em 0.18em 0.18em 0; overflow: visible; }
     .hero-copy p { margin-top: 1.1rem; font-size: 1.05rem; color: var(--text); max-width: 440px; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 1.9rem; }
     .hero-meta { margin-top: 1.6rem; font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
@@ -314,7 +328,7 @@
       .signals-grid, .partner-grid { grid-template-columns: 1fr; }
       .foot-grid { grid-template-columns: 1fr 1fr; }
       .hero-copy { position: static; max-width: none; padding: 2.5rem 1.5rem 0; }
-      .hero-fade { background: linear-gradient(0deg, rgba(13,11,7,0.55) 0%, rgba(13,11,7,0) 50%); }
+      .hero-fade { background: linear-gradient(0deg, rgba(13,11,7,1) 0%, rgba(13,11,7,0.8) 10%, rgba(13,11,7,0) 55%); }
     }
     @media (max-width: 620px) {
       .nav-links { display: none; }
@@ -398,7 +412,7 @@
   <section id="signals">
     <div class="wrap">
       <div class="signals-grid">
-        <div class="reveal">
+        <div class="reveal from-left">
           <h2 style="font-size:clamp(1.8rem,4vw,2.7rem);color:var(--white);font-weight:800;letter-spacing:-0.015em;">Live signals, <span class="gold-text">as they happen.</span></h2>
           <p style="margin-top:1rem;color:var(--muted);">New trades show up here live the moment they're posted — entry, stop, and targets, nothing hidden. Follow along in real time and learn the reasoning behind every setup.</p>
           <div class="hero-actions" style="margin-top:1.6rem;">
@@ -406,7 +420,7 @@
             <a class="btn btn-ghost" href="#signals">See a sample</a>
           </div>
         </div>
-        <div class="signal-card reveal d1">
+        <div class="signal-card reveal from-right d1">
           <div id="signalFeed">
             <div class="signal-row">
               <div><span class="signal-pair">XAUUSD</span> <span class="tag buy">BUY</span></div>
@@ -434,37 +448,37 @@
   <!-- ============ FREE / FEATURES ============ -->
   <section id="free">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Everything others charge for — <span class="gold-text">free here.</span></h2>
         <p>Four pillars of a gold-trading edge, bundled together and opened up at no cost.</p>
       </div>
       <div class="cards">
-        <div class="card reveal">
+        <div class="card reveal zoom">
           <div class="ico">🎓</div>
           <h3>Academy</h3>
           <p>Structured lessons with videos and exercises — from first candle to full system.</p>
           <div class="price"><span class="old">$149/mo</span><span class="free">Free</span></div>
         </div>
-        <div class="card reveal d1">
+        <div class="card reveal zoom d1">
           <div class="ico">📡</div>
           <h3>Signals</h3>
           <p>Entry, stop and targets posted live, with the reasoning behind each trade.</p>
           <div class="price"><span class="old">$99/mo</span><span class="free">Free</span></div>
         </div>
-        <div class="card reveal d2">
+        <div class="card reveal zoom d2">
           <div class="ico">🛠️</div>
           <h3>Tools</h3>
           <p>Lot-size and take-profit calculators, plus a setup-grade checker.</p>
           <div class="price"><span class="old">$39/mo</span><span class="free">Free</span></div>
         </div>
-        <div class="card reveal d3">
+        <div class="card reveal zoom d3">
           <div class="ico">📰</div>
           <h3>News</h3>
           <p>An economic calendar and the daily killzones that move gold.</p>
           <div class="price"><span class="old">$29/mo</span><span class="free">Free</span></div>
         </div>
       </div>
-      <div class="compare">
+      <div class="compare reveal">
         Elsewhere that's roughly <b>$316 / month</b>. Here it's <b>$0</b>.
         <div class="cta-row"><a class="btn btn-primary" href="#join">Start for free</a></div>
         <p style="font-size:0.78rem;margin-top:1rem;">Prices shown are illustrative of typical market rates. Your money always stays in your own account.</p>
@@ -476,7 +490,7 @@
   <section class="partner" id="partner">
     <div class="wrap">
       <div class="partner-grid">
-        <div>
+        <div class="reveal from-left">
           <h2>Invite friends. <span class="gold-text">Earn from every lot they trade.</span></h2>
           <p>Share your personal link and earn on the volume of everyone you bring in. Your status sets your rate — the more active your network, the more each lot is worth.</p>
           <div class="tiers">
@@ -489,7 +503,7 @@
           </div>
           <p style="font-size:0.82rem;color:var(--muted);margin-top:1rem;">Free · takes about half a minute. Figures shown are illustrative.</p>
         </div>
-        <div class="signal-card">
+        <div class="signal-card reveal from-right d1">
           <h3 style="color:var(--white);margin-bottom:0.3rem;">The partner network</h3>
           <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1.2rem;">How a small network compounds.</p>
           <div class="signal-row"><div>3 invitees</div><div class="signal-meta" style="color:var(--gold-hi);">first $100</div></div>
@@ -504,11 +518,11 @@
   <!-- ============ FAQ ============ -->
   <section id="faq">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Four brokers, <span class="gold-text">one hub.</span></h2>
         <p>The common questions, answered.</p>
       </div>
-      <div class="faq-list">
+      <div class="faq-list reveal d1">
         <details open>
           <summary>Which brokers are supported?</summary>
           <div class="answer">The hub works with four major brokers. You open an account with the one that suits your region, and everything connects through a single dashboard here.</div>
@@ -532,7 +546,7 @@
   <!-- ============ CTA ============ -->
   <section class="cta-band" id="join">
     <div class="wrap">
-      <div class="box">
+      <div class="box reveal">
         <h2>One market. <span class="gold-text">Master it.</span></h2>
         <p>Join free and start reading gold the way the pros do — takes about half a minute.</p>
         <a class="btn btn-primary" href="#top">Join the Gold Trading HUB</a>
@@ -543,7 +557,7 @@
   <!-- ============ FOOTER ============ -->
   <footer>
     <div class="wrap">
-      <div class="foot-grid">
+      <div class="foot-grid reveal">
         <div class="foot-brand">
           <a class="brand" href="#top"><span class="dot"></span> Gold Trading <span class="gold-text">HUB</span></a>
           <p>One market, every day. Free lessons, live signals and tools for serious XAUUSD traders.</p>
@@ -592,13 +606,22 @@
     /* ---- Hero: fade video in once it's playing (image shows until then) ---- */
     var heroVideo = document.getElementById('heroVideo');
     if (heroVideo && !reduceMotion) {
-      var showVideo = function () { heroVideo.classList.add('is-playing'); };
-      if (heroVideo.readyState >= 3) showVideo();
-      heroVideo.addEventListener('playing', showVideo);
-      heroVideo.addEventListener('canplay', function () {
-        var p = heroVideo.play();
-        if (p && p.catch) p.catch(function () {}); // autoplay blocked -> keep image
-      });
+      // Show the still at the top; fade to video while scrolled, back to the image at the top.
+      var playing = false;
+      var syncHero = function () {
+        var down = window.scrollY > 40;
+        if (down && !playing) {
+          playing = true;
+          var p = heroVideo.play();
+          if (p && p.catch) p.catch(function () {});
+          heroVideo.classList.add('is-playing');
+        } else if (!down && playing) {
+          playing = false;
+          heroVideo.classList.remove('is-playing'); // crossfade back to the image
+          heroVideo.pause();
+        }
+      };
+      window.addEventListener('scroll', syncHero, { passive: true });
     }
 
     /* ---- Scroll progress bar ---- */
@@ -624,14 +647,20 @@
       requestAnimationFrame(step);
     }
 
-    /* ---- Scroll reveal + trigger count-up ---- */
+    /* ---- Scroll reveal: fly in on enter, fly out on leave (reversible) ---- */
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('in');
-        e.target.querySelectorAll('[data-count]').forEach(countUp);
-        if (e.target.matches('[data-count]')) countUp(e.target);
-        io.unobserve(e.target);
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          // run count-up only the first time this element enters
+          if (!e.target._counted) {
+            e.target._counted = true;
+            e.target.querySelectorAll('[data-count]').forEach(countUp);
+            if (e.target.matches('[data-count]')) countUp(e.target);
+          }
+        } else {
+          e.target.classList.remove('in'); // leaves viewport -> flies back out
+        }
       });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
