@@ -202,7 +202,8 @@
     .hero-img-wrap { position: relative; width: 100%; }
     /* video-only hero: the video sets the natural height and is always visible */
     .hero-still { display: none; }
-    .hero-media { display: block; width: 100%; height: auto; object-fit: cover; }
+    .hero-media { display: block; width: 100%; height: auto; object-fit: cover; opacity: 1; transition: opacity .45s ease; }
+    .hero-media.seam { opacity: 0; } /* brief dip to hide the loop restart jump */
     /* reduced-motion users keep the poster still instead of motion */
     @media (prefers-reduced-motion: reduce) {
       .hero-media { display: none; }
@@ -656,11 +657,23 @@
       a.addEventListener('click', function () { links.classList.remove('open'); });
     });
 
-    /* ---- Hero: video always plays (no image swap) ---- */
+    /* ---- Hero: video always plays; crossfade the loop seam ---- */
     var heroVideo = document.getElementById('heroVideo');
     if (heroVideo && !reduceMotion) {
       var p = heroVideo.play();
       if (p && p.catch) p.catch(function () {}); // autoplay blocked -> poster shows
+      // AI clips rarely loop seamlessly; dip opacity near the end and restore after restart
+      var FADE = 0.45;
+      heroVideo.addEventListener('timeupdate', function () {
+        var d = heroVideo.duration;
+        if (d && d - heroVideo.currentTime < FADE) heroVideo.classList.add('seam');
+      });
+      heroVideo.addEventListener('seeked', function () { heroVideo.classList.remove('seam'); });
+      heroVideo.addEventListener('play', function () { heroVideo.classList.remove('seam'); });
+      // loop fires a timeupdate at ~0 after wrap; clear the dip once we're back near the start
+      heroVideo.addEventListener('timeupdate', function () {
+        if (heroVideo.currentTime < FADE) heroVideo.classList.remove('seam');
+      });
     }
 
     /* ---- Scroll progress bar ---- */
