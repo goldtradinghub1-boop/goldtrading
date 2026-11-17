@@ -778,10 +778,10 @@
     /* ---- Live XAU/USD price (free API, graceful simulated fallback) ---- */
     var valEl = document.getElementById('priceVal');
     var chgEl = document.getElementById('priceChg');
-    var base = 2650, cur = base;
+    var base = null, cur = 2650;            // base = first live price (change-since-load baseline)
     function render(up) {
       valEl.textContent = cur.toFixed(2);
-      var pct = ((cur - base) / base) * 100;
+      var pct = base ? ((cur - base) / base) * 100 : 0;
       chgEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
       chgEl.className = 'chg ' + (pct >= 0 ? 'up' : 'down');
       valEl.classList.remove('flash-up', 'flash-down');
@@ -804,12 +804,14 @@
         .then(function (d) {
           if (d && d.price) {
             stopSim();                       // real data arrived -> stop faking
-            var prev = cur; cur = d.price; render(cur >= prev);
+            var prev = cur; cur = d.price;
+            if (base === null) base = cur;   // anchor % change to the first live price
+            render(cur >= prev);
           } else { throw new Error('no price'); }
         });
     }
     // first load sets the baseline; re-fetch live every 15s, simulate only if a fetch fails
-    fetchPrice().then(function () { base = cur; }).catch(function () { cur = base; render(true); simulate(); });
+    fetchPrice().catch(function () { render(true); simulate(); });
     setInterval(function () { fetchPrice().catch(simulate); }, 15000);
 
     /* ---- RO/EN language toggle ---- */
