@@ -244,6 +244,7 @@
       font-size: 0.9rem; font-weight: 600; backdrop-filter: blur(6px);
     }
     .price-pill .lbl { color: var(--muted); letter-spacing: 0.04em; }
+    .price-pill .live-lbl { color: var(--gold-hi); font-weight: 700; letter-spacing: 0.12em; font-size: 0.72rem; }
     .price-pill .val { color: var(--white); font-variant-numeric: tabular-nums; min-width: 86px; }
     .price-pill .chg { font-size: 0.8rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 6px; }
     .price-pill .chg.up { color: #6fe3a0; background: rgba(70,200,120,0.14); }
@@ -437,6 +438,7 @@
       <p class="reveal d2" data-i18n="hero_lead">Trade one market, every day. Learn the system, read the signals, and use the tools the pros keep behind a paywall.</p>
       <div class="price-pill reveal d2" id="pricePill">
         <span class="live-dot"></span>
+        <span class="lbl live-lbl" data-i18n="price_live">LIVE</span>
         <span class="lbl">XAU/USD</span>
         <span class="val" id="priceVal">—</span>
         <span class="chg" id="priceChg">0.00%</span>
@@ -786,20 +788,29 @@
       void valEl.offsetWidth;
       valEl.classList.add(up ? 'flash-up' : 'flash-down');
     }
+    var simTimer = null;
     function simulate() {
-      setInterval(function () {
+      if (simTimer) return;                 // don't stack intervals
+      simTimer = setInterval(function () {
         var prev = cur;
         cur += (Math.random() - 0.48) * 2.2;
         render(cur >= prev);
       }, 2500);
     }
-    fetch('https://api.gold-api.com/price/XAU')
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (d) {
-        if (d && d.price) { base = cur = d.price; render(true); }
-        simulate();
-      })
-      .catch(function () { cur = base; render(true); simulate(); });
+    function stopSim() { if (simTimer) { clearInterval(simTimer); simTimer = null; } }
+    function fetchPrice() {
+      return fetch('https://api.gold-api.com/price/XAU')
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (d) {
+          if (d && d.price) {
+            stopSim();                       // real data arrived -> stop faking
+            var prev = cur; cur = d.price; render(cur >= prev);
+          } else { throw new Error('no price'); }
+        });
+    }
+    // first load sets the baseline; re-fetch live every 15s, simulate only if a fetch fails
+    fetchPrice().then(function () { base = cur; }).catch(function () { cur = base; render(true); simulate(); });
+    setInterval(function () { fetchPrice().catch(simulate); }, 15000);
 
     /* ---- RO/EN language toggle ---- */
     var I18N = {
@@ -808,6 +819,7 @@
         nav_join: "Intră gratuit",
         hero_lead: "Tranzacționează o singură piață, în fiecare zi. Învață sistemul, citește semnalele și folosește instrumentele pe care profesioniștii le țin contra cost.",
         hero_btn_tg: "Urmărește pe Telegram", hero_btn_free: "Ce e gratuit",
+        price_live: "LIVE",
         hero_meta: "Configurări postate <b>zilnic</b> · focus XAUUSD",
         stat1: "Piață, stăpânită", stat2: "Acoperire piață", stat3: "Ca să începi", stat4: "Brokeri, un singur hub",
         sig_h2: "Semnale live, <span class=\"gold-text\">pe măsură ce apar.</span>",
