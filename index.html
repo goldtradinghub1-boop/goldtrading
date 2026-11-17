@@ -286,6 +286,16 @@
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
     .signal-row.new { animation: rowIn .5s cubic-bezier(.2,.7,.2,1); }
     @keyframes rowIn { from { opacity: 0; transform: translateY(-10px); background: rgba(240,180,41,0.12); } to { opacity: 1; transform: none; } }
+    /* detailed "featured" signal (recreated from the posted Telegram setup) */
+    .sig-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
+    .sig-head .signal-pair { font-size: 1.1rem; }
+    .sig-pending { color: var(--gold-hi); font-weight: 600; }
+    .sig-label { color: var(--muted); font-size: 0.9rem; }
+    .sig-val { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--white); }
+    .signal-row.sig-entry .sig-val { color: var(--gold-hi); }
+    .signal-row.sig-tp .sig-val { color: #6fe3a0; }
+    .signal-row.sig-sl .sig-val { color: #f28b8b; }
+    .sig-risk { font-size: 0.8rem; color: var(--gold-hi); font-weight: 600; margin-top: 1rem; }
 
     /* ---- Feature cards ---- */
     .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
@@ -399,7 +409,6 @@
       <nav class="nav-links" id="navLinks">
         <a href="#signals" data-i18n="nav_signals">Signals</a>
         <a href="#free" data-i18n="nav_free">Free</a>
-        <a href="#partner" data-i18n="nav_partners">Partners</a>
         <a href="#faq" data-i18n="nav_faq">FAQ</a>
       </nav>
       <div class="nav-cta">
@@ -466,25 +475,42 @@
           </div>
         </div>
         <div class="signal-card reveal from-right d1">
+          <div class="sig-head">
+            <div><span class="signal-pair">XAUUSD</span> <span class="tag sell">SELL LIMIT</span></div>
+            <div class="signal-meta"><span class="sig-pending" data-i18n="sig_status">⏳ Pending</span></div>
+          </div>
           <div id="signalFeed">
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag buy">BUY</span></div>
-              <div class="signal-meta"><span class="live-dot"></span>Live · just now</div>
+            <div class="signal-row sig-entry">
+              <div class="sig-label" data-i18n="sig_entry">Entry (limit order)</div>
+              <div class="sig-val">3879</div>
             </div>
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag sell">SELL</span></div>
-              <div class="signal-meta">Closed · +38 pips</div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 1</div>
+              <div class="sig-val">3869</div>
             </div>
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag buy">BUY</span></div>
-              <div class="signal-meta">Closed · +52 pips</div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 2</div>
+              <div class="sig-val">3859</div>
             </div>
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag buy">BUY</span></div>
-              <div class="signal-meta">Target 1 hit</div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 3</div>
+              <div class="sig-val">3849</div>
+            </div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 4</div>
+              <div class="sig-val">3839</div>
+            </div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 5</div>
+              <div class="sig-val">3829</div>
+            </div>
+            <div class="signal-row sig-sl">
+              <div class="sig-label" data-i18n="sig_sl">Stop Loss</div>
+              <div class="sig-val">3891</div>
             </div>
           </div>
-          <p style="font-size:0.75rem;color:var(--muted);margin-top:1rem;" data-i18n="sig_note">Sample data shown for illustration. Trading gold carries risk.</p>
+          <p class="sig-risk" data-i18n="sig_risk">Risk max 1–2% per trade ‼️</p>
+          <p style="font-size:0.75rem;color:var(--muted);margin-top:0.6rem;" data-i18n="sig_note">Example of a real posted setup. Trading gold carries risk.</p>
         </div>
       </div>
     </div>
@@ -792,22 +818,6 @@
       })
       .catch(function () { cur = base; render(true); simulate(); });
 
-    /* ---- Self-updating signal feed ---- */
-    var feed = document.getElementById('signalFeed');
-    if (feed && !reduceMotion) {
-      var dirs = ['buy', 'sell'];
-      setInterval(function () {
-        var dir = dirs[Math.floor(Math.random() * 2)];
-        var row = document.createElement('div');
-        row.className = 'signal-row new';
-        row.innerHTML = '<div><span class="signal-pair">XAUUSD</span> <span class="tag ' + dir + '">' +
-          dir.toUpperCase() + '</span></div>' +
-          '<div class="signal-meta"><span class="live-dot"></span>Live · just now</div>';
-        feed.insertBefore(row, feed.firstChild);
-        while (feed.children.length > 4) feed.removeChild(feed.lastChild);
-      }, 6000);
-    }
-
     /* ---- RO/EN language toggle ---- */
     var I18N = {
       ro: {
@@ -820,7 +830,9 @@
         sig_h2: "Semnale live, <span class=\"gold-text\">pe măsură ce apar.</span>",
         sig_p: "Tranzacțiile noi apar aici live în momentul în care sunt postate — intrare, stop și ținte, nimic ascuns. Urmărește în timp real și învață raționamentul din spatele fiecărei configurări.",
         sig_btn1: "Deblochează semnalele", sig_btn2: "Vezi un exemplu",
-        sig_note: "Date exemplificative. Tranzacționarea aurului implică risc.",
+        sig_status: "⏳ În așteptare", sig_entry: "Intrare (ordin limită)", sig_sl: "Stop Loss",
+        sig_risk: "Risc maxim 1–2% per tranzacție ‼️",
+        sig_note: "Exemplu de configurare reală postată. Tranzacționarea aurului implică risc.",
         free_h2: "Tot ce alții taxează — <span class=\"gold-text\">aici e gratuit.</span>",
         free_sub: "Patru piloni ai avantajului în tranzacționarea aurului, grupați și oferiți fără niciun cost.",
         free_word: "Gratuit",
