@@ -715,8 +715,27 @@
     /* ---- Hero: video always plays; crossfade the loop seam ---- */
     var heroVideo = document.getElementById('heroVideo');
     if (heroVideo) {
-      var p = heroVideo.play();
-      if (p && p.catch) p.catch(function () {}); // autoplay blocked -> first frame shows
+      // Safari ignores the muted *attribute* for autoplay — it must be set on the
+      // property in JS. Also force inline + a load, then retry play a few ways.
+      heroVideo.muted = true;
+      heroVideo.defaultMuted = true;
+      heroVideo.setAttribute('muted', '');
+      heroVideo.playsInline = true;
+      function tryPlay() {
+        var pr = heroVideo.play();
+        if (pr && pr.catch) pr.catch(function () {}); // blocked -> first frame shows
+      }
+      tryPlay();
+      // the first play() can fire before Safari has the media ready
+      heroVideo.addEventListener('canplay', tryPlay, { once: true });
+      heroVideo.addEventListener('loadeddata', tryPlay, { once: true });
+      // last resort: kick it off on the first user gesture (Low Power Mode etc.)
+      ['touchstart', 'click', 'scroll'].forEach(function (ev) {
+        window.addEventListener(ev, function once() {
+          tryPlay();
+          ['touchstart', 'click', 'scroll'].forEach(function (e2) { window.removeEventListener(e2, once); });
+        }, { once: true, passive: true });
+      });
       // AI clips rarely loop seamlessly; dip opacity near the end and restore after restart
       var FADE = 0.45;
       heroVideo.addEventListener('timeupdate', function () {
