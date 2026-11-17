@@ -7,7 +7,7 @@
   <meta name="description" content="Gold Trading HUB — free lessons, live signals, tools and news for XAUUSD (gold) traders. One market, mastered daily." />
   <meta name="keywords" content="gold trading, XAUUSD, forex signals, trading academy, gold signals, trading tools, live signals" />
   <meta name="author" content="Gold Trading HUB" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="noindex, follow" />
   <meta name="theme-color" content="#0d0b07" />
   <link rel="canonical" href="https://goldtradinghub.com/" />
   <!-- Open Graph -->
@@ -285,6 +285,16 @@
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
     .signal-row.new { animation: rowIn .5s cubic-bezier(.2,.7,.2,1); }
     @keyframes rowIn { from { opacity: 0; transform: translateY(-10px); background: rgba(240,180,41,0.12); } to { opacity: 1; transform: none; } }
+    /* detailed "featured" signal (recreated from the posted Telegram setup) */
+    .sig-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
+    .sig-head .signal-pair { font-size: 1.1rem; }
+    .sig-pending { color: var(--gold-hi); font-weight: 600; }
+    .sig-label { color: var(--muted); font-size: 0.9rem; }
+    .sig-val { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--white); }
+    .signal-row.sig-entry .sig-val { color: var(--gold-hi); }
+    .signal-row.sig-tp .sig-val { color: #6fe3a0; }
+    .signal-row.sig-sl .sig-val { color: #f28b8b; }
+    .sig-risk { font-size: 0.8rem; color: var(--gold-hi); font-weight: 600; margin-top: 1rem; }
 
     /* ---- Feature cards ---- */
     .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
@@ -398,7 +408,6 @@
       <nav class="nav-links" id="navLinks">
         <a href="#signals" data-i18n="nav_signals">Signals</a>
         <a href="#free" data-i18n="nav_free">Free</a>
-        <a href="#partner" data-i18n="nav_partners">Partners</a>
         <a href="#faq" data-i18n="nav_faq">FAQ</a>
       </nav>
       <div class="nav-cta">
@@ -446,7 +455,6 @@
       <div class="stat reveal"><div class="n gold-text" data-count="1">1</div><div class="k" data-i18n="stat1">Market, mastered</div></div>
       <div class="stat reveal d1"><div class="n gold-text">24/5</div><div class="k" data-i18n="stat2">Market coverage</div></div>
       <div class="stat reveal d2"><div class="n gold-text" data-count="0" data-prefix="$">$0</div><div class="k" data-i18n="stat3">To get started</div></div>
-      <div class="stat reveal d3"><div class="n gold-text" data-count="4">4</div><div class="k" data-i18n="stat4">Brokers, one hub</div></div>
     </div>
   </div>
 
@@ -463,25 +471,42 @@
           </div>
         </div>
         <div class="signal-card reveal from-right d1">
+          <div class="sig-head">
+            <div><span class="signal-pair">XAUUSD</span> <span class="tag sell">SELL LIMIT</span></div>
+            <div class="signal-meta"><span class="sig-pending" data-i18n="sig_status">⏳ Pending</span></div>
+          </div>
           <div id="signalFeed">
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag buy">BUY</span></div>
-              <div class="signal-meta"><span class="live-dot"></span>Live · just now</div>
+            <div class="signal-row sig-entry">
+              <div class="sig-label" data-i18n="sig_entry">Entry (limit order)</div>
+              <div class="sig-val">3879</div>
             </div>
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag sell">SELL</span></div>
-              <div class="signal-meta">Closed · +38 pips</div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 1</div>
+              <div class="sig-val">3869</div>
             </div>
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag buy">BUY</span></div>
-              <div class="signal-meta">Closed · +52 pips</div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 2</div>
+              <div class="sig-val">3859</div>
             </div>
-            <div class="signal-row">
-              <div><span class="signal-pair">XAUUSD</span> <span class="tag buy">BUY</span></div>
-              <div class="signal-meta">Target 1 hit</div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 3</div>
+              <div class="sig-val">3849</div>
+            </div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 4</div>
+              <div class="sig-val">3839</div>
+            </div>
+            <div class="signal-row sig-tp">
+              <div class="sig-label">Take Profit 5</div>
+              <div class="sig-val">3829</div>
+            </div>
+            <div class="signal-row sig-sl">
+              <div class="sig-label" data-i18n="sig_sl">Stop Loss</div>
+              <div class="sig-val">3891</div>
             </div>
           </div>
-          <p style="font-size:0.75rem;color:var(--muted);margin-top:1rem;" data-i18n="sig_note">Sample data shown for illustration. Trading gold carries risk.</p>
+          <p class="sig-risk" data-i18n="sig_risk">Risk max 1–2% per trade ‼️</p>
+          <p style="font-size:0.75rem;color:var(--muted);margin-top:0.6rem;" data-i18n="sig_note">Example of a real posted setup. Trading gold carries risk.</p>
         </div>
       </div>
     </div>
@@ -561,25 +586,29 @@
   <section id="faq">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2 data-i18n="faq_h2">Four brokers, <span class="gold-text">one hub.</span></h2>
-        <p data-i18n="faq_sub">The common questions, answered.</p>
+        <h2 data-i18n="faq_h2">Questions? <span class="gold-text">We've got answers.</span></h2>
+        <p data-i18n="faq_sub">Everything about access, signals and how it all works.</p>
       </div>
       <div class="faq-list reveal d1">
         <details open>
-          <summary data-i18n="faq_q1">Which brokers are supported?</summary>
-          <div class="answer" data-i18n="faq_a1">The hub works with four major brokers. You open an account with the one that suits your region, and everything connects through a single dashboard here.</div>
+          <summary data-i18n="faq_q1">How much does Premium group access cost?</summary>
+          <div class="answer" data-i18n="faq_a1"><strong>Premium group access is 100% FREE!</strong> We don't charge monthly fees or subscriptions. To benefit from our Premium signals and analysis, you only need to meet the access conditions through our partner broker.</div>
         </details>
         <details>
-          <summary data-i18n="faq_q2">Which broker should I choose?</summary>
-          <div class="answer" data-i18n="faq_a2">Pick based on your country, funding methods and spreads on gold. If you're unsure, start with the one available in your region — you can always add another later.</div>
+          <summary data-i18n="faq_q2">How can I join the Premium group?</summary>
+          <div class="answer" data-i18n="faq_a2">To get access, you need to create an account through our partner broker's link and meet the eligibility conditions. For more details, contact us on Telegram at <strong>@CryptoWhale88_8</strong> or join our free group.</div>
         </details>
         <details>
-          <summary data-i18n="faq_q3">I already have an account. Does it count?</summary>
-          <div class="answer" data-i18n="faq_a3">Existing accounts can often be linked. Connect it from your profile, and if it qualifies, your access unlocks the same way a new account would.</div>
+          <summary data-i18n="faq_q3">How many trading signals do you provide daily?</summary>
+          <div class="answer" data-i18n="faq_a3">Depending on the opportunities identified in the gold market (XAUUSD), we typically provide between <strong>2 and 5 signals per day</strong>. Each signal includes clear Entry, Stop Loss (SL) and Take Profit (TP) levels. The number can vary with market conditions — we prioritize the quality of opportunities, not quantity.</div>
         </details>
         <details>
-          <summary data-i18n="faq_q4">Where does my deposit go?</summary>
-          <div class="answer" data-i18n="faq_a4">Straight into your own brokerage account, through the broker's own client portal. Your funds stay yours — the hub never holds your money.</div>
+          <summary data-i18n="faq_q4">Do you have access to my money or profit from my losses?</summary>
+          <div class="answer" data-i18n="faq_a4"><strong>No. We don't have access to your funds and we don't manage your trading account.</strong> The money stays in your personal account, and you keep full control over deposits, withdrawals and trades. We don't receive the money you lose on trades — our collaboration is based on commissions generated through the partner broker.</div>
+        </details>
+        <details>
+          <summary data-i18n="faq_q5">How does Gold Trading HUB make money if Premium access is free?</summary>
+          <div class="answer" data-i18n="faq_a5">Our business model is based on broker partnerships. When you trade through our partner broker, it shares part of the commissions from your trading activity with us, per the affiliate agreement. These commissions are part of the trading costs already applied to your account — we never charge you an extra subscription. <strong>Our goal is to build a community of active, disciplined, long-term sustainable traders</strong> who trade responsibly and get the best possible results.</div>
         </details>
       </div>
     </div>
@@ -772,22 +801,6 @@
       })
       .catch(function () { cur = base; render(true); simulate(); });
 
-    /* ---- Self-updating signal feed ---- */
-    var feed = document.getElementById('signalFeed');
-    if (feed && !reduceMotion) {
-      var dirs = ['buy', 'sell'];
-      setInterval(function () {
-        var dir = dirs[Math.floor(Math.random() * 2)];
-        var row = document.createElement('div');
-        row.className = 'signal-row new';
-        row.innerHTML = '<div><span class="signal-pair">XAUUSD</span> <span class="tag ' + dir + '">' +
-          dir.toUpperCase() + '</span></div>' +
-          '<div class="signal-meta"><span class="live-dot"></span>Live · just now</div>';
-        feed.insertBefore(row, feed.firstChild);
-        while (feed.children.length > 4) feed.removeChild(feed.lastChild);
-      }, 6000);
-    }
-
     /* ---- RO/EN language toggle ---- */
     var I18N = {
       ro: {
@@ -800,7 +813,9 @@
         sig_h2: "Semnale live, <span class=\"gold-text\">pe măsură ce apar.</span>",
         sig_p: "Tranzacțiile noi apar aici live în momentul în care sunt postate — intrare, stop și ținte, nimic ascuns. Urmărește în timp real și învață raționamentul din spatele fiecărei configurări.",
         sig_btn1: "Deblochează semnalele", sig_btn2: "Vezi un exemplu",
-        sig_note: "Date exemplificative. Tranzacționarea aurului implică risc.",
+        sig_status: "⏳ În așteptare", sig_entry: "Intrare (ordin limită)", sig_sl: "Stop Loss",
+        sig_risk: "Risc maxim 1–2% per tranzacție ‼️",
+        sig_note: "Exemplu de configurare reală postată. Tranzacționarea aurului implică risc.",
         free_h2: "Tot ce alții taxează — <span class=\"gold-text\">aici e gratuit.</span>",
         free_sub: "Patru piloni ai avantajului în tranzacționarea aurului, grupați și oferiți fără niciun cost.",
         free_word: "Gratuit",
@@ -819,16 +834,18 @@
         pnet_t: "Rețeaua de parteneri", pnet_p: "Cum se compune o rețea mică.",
         pnet_r1: "3 invitați", pnet_v1: "primii 100 $", pnet_r2: "10 invitați", pnet_r3: "25 invitați",
         pnet_note: "Date exemplificative, doar pentru ilustrare.",
-        faq_h2: "Patru brokeri, <span class=\"gold-text\">un singur hub.</span>",
-        faq_sub: "Întrebările frecvente, cu răspunsuri.",
-        faq_q1: "Ce brokeri sunt acceptați?",
-        faq_a1: "Hub-ul funcționează cu patru brokeri importanți. Îți deschizi cont la cel potrivit regiunii tale, iar totul se conectează printr-un singur panou aici.",
-        faq_q2: "Ce broker ar trebui să aleg?",
-        faq_a2: "Alege în funcție de țară, metode de finanțare și spread-uri la aur. Dacă nu ești sigur, începe cu cel disponibil în regiunea ta — poți adăuga altul oricând.",
-        faq_q3: "Am deja un cont. Contează?",
-        faq_a3: "Conturile existente pot fi adesea conectate. Conectează-l din profil și, dacă se califică, accesul se deblochează la fel ca pentru un cont nou.",
-        faq_q4: "Unde ajunge depozitul meu?",
-        faq_a4: "Direct în propriul tău cont de brokeraj, prin portalul clientului brokerului. Fondurile rămân ale tale — hub-ul nu îți deține niciodată banii.",
+        faq_h2: "Întrebări? <span class=\"gold-text\">Avem răspunsuri.</span>",
+        faq_sub: "Totul despre acces, semnale și cum funcționează.",
+        faq_q1: "Cât costă accesul în grupul Premium?",
+        faq_a1: "<strong>Accesul în grupul Premium este 100% GRATUIT!</strong> Nu percepem taxe lunare sau abonamente. Pentru a beneficia de semnalele și analizele noastre Premium, trebuie doar să îndeplinești condițiile de acces prin brokerul nostru partener.",
+        faq_q2: "Cum pot intra în grupul Premium?",
+        faq_a2: "Pentru a obține acces, trebuie să îți creezi un cont prin linkul brokerului cu care colaborăm și să îndeplinești condițiile de eligibilitate. Pentru mai multe detalii, contactează-ne pe Telegram la <strong>@CryptoWhale88_8</strong> sau alătură-te grupului nostru gratuit.",
+        faq_q3: "Câte semnale de tranzacționare oferiți zilnic?",
+        faq_a3: "În funcție de oportunitățile identificate pe piața aurului (XAUUSD), oferim, de regulă, între <strong>2 și 5 semnale pe zi</strong>. Fiecare semnal include niveluri clare de intrare (Entry), Stop Loss (SL) și Take Profit (TP). Numărul semnalelor poate varia în funcție de condițiile pieței. Prioritizăm calitatea oportunităților, nu cantitatea.",
+        faq_q4: "Aveți acces la banii mei sau câștigați din pierderile mele?",
+        faq_a4: "<strong>Nu. Nu avem acces la fondurile tale și nu administrăm contul tău de tranzacționare.</strong> Banii rămân în contul tău personal, iar tu deții controlul asupra depunerilor, retragerilor și tranzacțiilor efectuate. Nu primim direct banii pe care îi pierzi în tranzacții. Colaborarea noastră se bazează pe comisioanele generate prin brokerul partener.",
+        faq_q5: "Cum câștigă Gold Trading HUB bani dacă accesul Premium este gratuit?",
+        faq_a5: "Modelul nostru de business se bazează pe parteneriate cu brokeri. Atunci când tranzacționezi prin brokerul nostru partener, acesta ne oferă o parte din comisioanele aferente activității tale de tranzacționare, conform acordului de afiliere. Aceste comisioane fac parte din costurile de tranzacționare aplicabile contului tău, fără să îți percepem noi un abonament suplimentar. <strong>Obiectivul nostru este să construim o comunitate de traderi activi, disciplinați și sustenabili pe termen lung.</strong> Ne dorim ca membrii noștri să tranzacționeze responsabil și să aibă rezultate cât mai bune.",
         cta_h2: "O singură piață. <span class=\"gold-text\">Stăpânește-o.</span>",
         cta_p: "Intră gratuit și începe să citești aurul ca profesioniștii — durează aproximativ o jumătate de minut.",
         cta_btn: "Intră în Gold Trading HUB",

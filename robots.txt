@@ -1,0 +1,25 @@
+# Gold Trading HUB — robots
+
+User-agent: *
+Allow: /
+Disallow: /v2/
+
+# AI / generative-engine crawlers — explicitly welcome
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://goldtradinghub.com/sitemap.xml
