@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -18,7 +18,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://goldtradinghub.ro/" />
   <meta property="og:site_name" content="Gold Trading HUB" />
-  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale" content="ro_RO" />
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Gold Trading HUB — Trade one market. Master it." />
@@ -413,8 +413,8 @@
       </nav>
       <div class="nav-cta">
         <div class="lang-toggle" id="langToggle">
-          <button data-lang="en" class="active">EN</button>
-          <button data-lang="ro">RO</button>
+          <button data-lang="en">EN</button>
+          <button data-lang="ro" class="active">RO</button>
         </div>
         <a class="btn btn-primary" href="https://t.me/+BxJ8pG-A6HxkN2Y0" target="_blank" rel="noopener" data-i18n="nav_join">Join free</a>
       </div>
@@ -863,9 +863,9 @@
       b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); });
     });
 
-    var saved = 'en';
-    try { saved = localStorage.getItem('gth_lang') || 'en'; } catch (e) {}
-    if (saved !== 'en') setLang(saved);
+    var saved = 'ro';
+    try { saved = localStorage.getItem('gth_lang') || 'ro'; } catch (e) {}
+    setLang(saved);
   })();
   </script>
 
